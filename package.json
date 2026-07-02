@@ -16,6 +16,7 @@
     "typecheck": "bun turbo typecheck",
     "upgrade-opentui": "bun run script/upgrade-opentui.ts",
     "postinstall": "bun run --cwd packages/core fix-node-pty",
+    "installprod": "bun remove -g opencode-ai opencode && OPENCODE_CHANNEL=latest bun run --cwd packages/opencode script/build.ts --skip-embed-web-ui && rm -f ~/.bun/bin/opencode && cp packages/opencode/dist/opencode-linux-x64/bin/opencode ~/.bun/bin/opencode",
     "prepare": "husky",
     "random": "echo 'Random script'",
     "sso": "aws sso login --sso-session=opencode --no-browser",
