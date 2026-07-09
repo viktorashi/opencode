@@ -124,7 +124,18 @@ function stateApi(sync: ReturnType<typeof useSync>): TuiPluginApi["state"] {
         return sync.session.get(sessionID)
       },
       diff(sessionID) {
-        return (sync.data.session_diff[sessionID] ?? []).flatMap((item) =>
+        let diffs = sync.data.session_diff[sessionID] ?? []
+        if (diffs.length === 0) {
+          const messages = sync.data.message[sessionID] ?? []
+          for (let i = messages.length - 1; i >= 0; i--) {
+            const message = messages[i]
+            if (message?.role === "user" && message.summary?.diffs?.length) {
+              diffs = message.summary.diffs
+              break
+            }
+          }
+        }
+        return diffs.flatMap((item) =>
           item.file === undefined ? [] : [{ ...item, file: item.file }],
         )
       },
